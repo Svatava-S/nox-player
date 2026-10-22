@@ -22,9 +22,12 @@ jobs:
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
 
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
-        continue-on-error: true
+      - name: Install Gradle & Generate Wrapper
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gradle
+          gradle wrapper --gradle-version 8.5
+          chmod +x gradlew
 
       - name: Build Debug APK with Gradle
         run: ./gradlew assembleDebug
