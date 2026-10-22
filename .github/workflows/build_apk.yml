@@ -19,18 +19,16 @@ jobs:
           distribution: "zulu"
           java-version: "17"
 
-      - name: Setup Android SDK
-        uses: android-actions/setup-android@v3
-
-      - name: Install Gradle & Generate Wrapper
+      - name: Build APK with Gradle
+        env:
+          ANDROID_SDK_ROOT: /usr/local/lib/android/sdk
         run: |
+          echo "sdk.dir=$ANDROID_SDK_ROOT" > local.properties
           sudo apt-get update
           sudo apt-get install -y gradle
           gradle wrapper --gradle-version 8.5
           chmod +x gradlew
-
-      - name: Build Debug APK with Gradle
-        run: ./gradlew assembleDebug
+          ./gradlew assembleDebug --no-daemon
 
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
